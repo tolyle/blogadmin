@@ -1,5 +1,4 @@
 package org.lyle.utils.network;
-import groovy.util.logging.Slf4j;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,7 +12,6 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Map;
 import java.util.Objects;
-@Slf4j
 public class HttpUtils {
 	private static final Logger log = LoggerFactory.getLogger(HttpUtils.class);
 
