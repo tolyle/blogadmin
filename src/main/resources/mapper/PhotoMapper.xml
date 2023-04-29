@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.lyle.mapper.PhotoMapper">
+    <resultMap id="BaseResultMap" type="org.lyle.entity.Photo">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="tags" jdbcType="VARCHAR" property="tags" />
+        <result column="thumbnail_url" jdbcType="VARCHAR" property="thumbnailUrl" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, title, tags, thumbnail_url
+    </sql>
+    <insert id="addPhoto" parameterType="org.lyle.entity.Photo">
+        insert into photo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                title,
+            </if>
+            <if test="thumbnailUrl != null">
+                thumbnail_url,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="thumbnailUrl != null">
+                #{thumbnail_url,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

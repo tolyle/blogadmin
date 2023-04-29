@@ -1,0 +1,18 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.168.1:3306/blog?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false&serverTimezone=UTC
+    username: lyle
+    password: 188O6665O5O
+    type: com.alibaba.druid.pool.DruidDataSource
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type:auto
+  typeEnumsPackage: com.baomidou.springboot.entity.enums
+logging:
+  config: classpath:logback-spring.xml
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
