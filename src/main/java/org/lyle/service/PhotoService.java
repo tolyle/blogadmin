@@ -1,4 +1,4 @@
-package org.lyle.service
+package org.lyle.service;
 
 
 interface PhotoService   {
