@@ -7,11 +7,19 @@ spring:
     username: lyle
     password: 188O6665O5O
     type: com.alibaba.druid.pool.DruidDataSource
-mybatis-plus:
-  global-config:
-    db-config:
-      id-type:auto
-  typeEnumsPackage: com.baomidou.springboot.entity.enums
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
 logging:
   config: classpath:logback-spring.xml
 mybatis:

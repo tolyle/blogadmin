@@ -1,10 +1,9 @@
-package org.lyle.run;
+package org.lyle;
 
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -14,8 +13,6 @@ import java.util.Arrays;
 @SpringBootApplication
 @ComponentScan("org.lyle")
 public class Application {
-
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
 

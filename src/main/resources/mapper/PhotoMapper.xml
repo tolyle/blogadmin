@@ -10,7 +10,7 @@
     <sql id="Base_Column_List">
         id, title, tags, thumbnail_url
     </sql>
-    <insert id="addPhoto" parameterType="org.lyle.entity.Photo">
+    <insert id="selectPassword" parameterType="org.lyle.entity.Photo">
         insert into photo
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="title != null">

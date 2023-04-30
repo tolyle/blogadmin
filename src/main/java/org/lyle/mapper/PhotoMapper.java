@@ -1,10 +1,17 @@
 package org.lyle.mapper;
 
-
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.lyle.entity.Photo;
+import org.springframework.stereotype.Repository;
 
-interface PhotoMapper {
-	void addPhoto(Photo photo);
+@Mapper
+public interface PhotoMapper {
+    //根据username查询password
+    String selectPassword(String username);
 
-	Photo queryPhotoById(Long id);
+    @Select("select * from photo where id = #{id}")
+    Photo getPhoto(@Param("id") long id);
+
 }
