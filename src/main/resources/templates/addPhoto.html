@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>上传图片</title>
+</head>
+<body>
+
+<form id="ff" th:action="@{/savePhoto}" enctype="multipart/form-data" method="post">
+    上传文件:<input type="file" name="file" id="file" multiple="multiple"/>
+    <input type="submit" id="submitBtn"  value="上传..."/>
+</form>
+
+
+</body>
+</html>

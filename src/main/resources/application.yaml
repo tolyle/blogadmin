@@ -1,9 +1,25 @@
 spring:
+  servlet:
+    # 文件上传相关配置项
+    multipart:
+      max-file-size: 16MB # 单个文件大小
+      max-request-size: 32MB # 设置总上传的文件大小
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/resources/templates
+    livereload:
+      enabled: true
   profiles:
     active: dev
+  thymeleaf:
+    cache: false
+    mode: HTML5
+    content-type: text/html
+    encoding: UTF-8
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.168.1:3306/blog?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/blog?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false&serverTimezone=UTC
     username: lyle
     password: 188O6665O5O
     type: com.alibaba.druid.pool.DruidDataSource
