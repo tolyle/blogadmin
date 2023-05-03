@@ -2,7 +2,7 @@ package org.lyle.utils.file;
 
 import org.apache.commons.io.FilenameUtils;
 import org.lyle.exception.BusinessException;
-import org.lyle.utils.date.DateUtils;
+import org.lyle.utils.date.DateUtil;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * 文件上传帮助类
  */
-public class FileUploadUtils {
+public class FileUploadUtil {
 
 	public static String uploadFile(MultipartFile file, String filePath) throws IOException {
 		int fileNameLength = file.getOriginalFilename().length();
@@ -22,10 +22,10 @@ public class FileUploadUtils {
 		String fileName = file.getOriginalFilename();
 		String extension = FilenameUtils.getExtension(fileName);
 		if (StringUtils.isEmpty(extension)) {
-			extension = MimeTypeUtils.getExtension(file.getContentType());
+			extension = MimeTypeUtil.getExtension(file.getContentType());
 		}
-		String encodingFilename = FileUtils.encodingFilename(fileName);
-		fileName = DateUtils.datePath() + "/" + encodingFilename + "." + extension;
+		String encodingFilename = FileUtil.encodingFilename(fileName);
+		fileName = DateUtil.datePath() + "/" + encodingFilename + "." + extension;
 		File desc = new File(filePath, fileName);
 		if (!desc.getParentFile().exists()) {
 			desc.getParentFile().mkdirs();

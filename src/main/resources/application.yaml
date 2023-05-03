@@ -1,9 +1,21 @@
 spring:
+  server:
+    tomcat:
+      uri-encoding: UTF-8
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
   servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
     # 文件上传相关配置项
     multipart:
-      max-file-size: 16MB # 单个文件大小
-      max-request-size: 32MB # 设置总上传的文件大小
+      max-file-size: 32MB # 单个文件大小
+      max-request-size: 500MB # 设置总上传的文件大小
   devtools:
     restart:
       enabled: true
@@ -17,9 +29,12 @@ spring:
     mode: HTML5
     content-type: text/html
     encoding: UTF-8
+    prefix: classpath:/templates/
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/blog?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false&serverTimezone=UTC
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#    url: jdbc:mysql://192.168.168.1:3306/blog?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false&serverTimezone=UTC
+    url: jdbc:log4jdbc:mysql://192.168.168.1:3306/blog?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false&serverTimezone=UTC
     username: lyle
     password: 188O6665O5O
     type: com.alibaba.druid.pool.DruidDataSource
@@ -39,8 +54,10 @@ spring:
 logging:
   config: classpath:logback-spring.xml
 mybatis:
-  mapper-locations: classpath:mapper/*Mapper.xml
-
+  mapper-locations: classpath*:mapper/*.xml
+  configuration:
+    lazy-loading-enabled: false
+    aggressive-lazy-loading: false
 # Jackson 配置项
 jackson:
   serialization:

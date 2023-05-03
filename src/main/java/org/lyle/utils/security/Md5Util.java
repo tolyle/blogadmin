@@ -6,8 +6,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Objects;
 
-public class Md5Utils {
-	private static final Logger log = LoggerFactory.getLogger(Md5Utils.class);
+public class Md5Util {
+	private static final Logger log = LoggerFactory.getLogger(Md5Util.class);
 
 	private static byte[] md5(String s) {
 		MessageDigest algorithm;

@@ -2,7 +2,7 @@ package org.lyle.utils.file;
 
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.lyle.utils.security.Md5Utils;
+import org.lyle.utils.security.Md5Util;
 
 import java.io.*;
 import java.net.URLEncoder;
@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * 文件处理工具类
  */
-public class FileUtils extends org.apache.commons.io.FileUtils {
+public class FileUtil extends org.apache.commons.io.FileUtils {
 	public static String FILENAME_PATTERN = "[a-zA-Z0-9_\\-|.\\u4e00-\\u9fa5]+";
 
 	private static int counter = 0;
@@ -111,7 +111,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 
 	public static String encodingFilename(String fileName) {
 		fileName = fileName.replace("_", " ");
-		fileName = Md5Utils.hash(fileName + System.nanoTime() + counter++);
+		fileName = Md5Util.hash(fileName + System.nanoTime() + counter++);
 		return fileName;
 	}
 }

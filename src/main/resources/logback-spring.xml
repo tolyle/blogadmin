@@ -49,15 +49,43 @@
         </encoder>
     </appender>
 
+    <!-- 级别依次为【从高到低】：FATAL > ERROR > WARN > INFO > DEBUG > TRACE -->
+    <logger name="org.apache" level="ERROR" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="org.thymeleaf.TemplateEngine" level="ERROR" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="o.s.b.f.s.DefaultListableBeanFactory" level="ERROR" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <!--监控sql日志输出 -->
+    <logger name="jdbc.sqlonly" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="jdbc.resultset" level="ERROR" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="jdbc.resultsettable" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="jdbc.connection" level="OFF" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="jdbc.sqltiming" level="OFF" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
+    <logger name="jdbc.audit" level="OFF" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+
     <springProfile name="dev">
         <!-- ROOT 日志级别 -->
-        <root level="DEBUG">
+        <root level="INFO">
             <appender-ref ref="STDOUT"/>
         </root>
-        <!-- 级别依次为【从高到低】：FATAL > ERROR > WARN > INFO > DEBUG > TRACE -->
-        <logger name="org.apache" level="ERROR" additivity="false">
-            <appender-ref ref="STDOUT"/>
-        </logger>
     </springProfile>
 
     <springProfile name="prod">
@@ -66,10 +94,6 @@
             <appender-ref ref="STDOUT"/>
             <appender-ref ref="FILE"/>
         </root>
-        <!-- 级别依次为【从高到低】：FATAL > ERROR > WARN > INFO > DEBUG > TRACE -->
-        <logger name="org.apache" level="ERROR" additivity="false">
-            <appender-ref ref="STDOUT"/>
-        </logger>
     </springProfile>
 </configuration>
 <!--<configuration>-->

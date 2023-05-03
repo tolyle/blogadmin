@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * 时间工具类
  */
-public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
+public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
 	public static String YYYY = "yyyy";
 
 	public static String YYYY_MM = "yyyy-MM";
@@ -228,7 +228,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 	 */
 	public static boolean checkDateStrIsValid(String str) {
 		try {
-			DateUtils.parseDate(str);
+			DateUtil.parseDate(str);
 			return true;
 		} catch (Exception e) {
 			return false;

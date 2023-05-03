@@ -12,8 +12,8 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Map;
 import java.util.Objects;
-public class HttpUtils {
-	private static final Logger log = LoggerFactory.getLogger(HttpUtils.class);
+public class HttpUtil {
+	private static final Logger log = LoggerFactory.getLogger(HttpUtil.class);
 
 	/**
 	 * 允许 JS 跨域设置

@@ -3,7 +3,7 @@ package org.lyle.utils.file;
 /**
  * 媒体类型工具类
  */
-public class MimeTypeUtils {
+public class MimeTypeUtil {
 	public static final String IMAGE_PNG = "image/png";
 
 	public static final String IMAGE_JPG = "image/jpg";
