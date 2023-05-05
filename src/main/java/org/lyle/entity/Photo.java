@@ -5,14 +5,14 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class Photo  {
-	private Long  id;
+public class Photo {
+	private Long id;
 	//照片标题
 	private String title;
 	//标签
 	private String tags;
 	//缩略图地址
-	private String  thumbnailUrl;
+	private String thumbnailUrl;
 	//缩略图宽度
 	private Integer thumbnailWidth;
 	//缩略图高度
@@ -31,8 +31,14 @@ public class Photo  {
 	private Double photoLongitude;
 	//原图地址
 	private String srcUrl;
-	//拍摄分辨率
-	private String srcResolution;
+	//拍摄分辨率宽
+	private Integer srcWidth;
+	//拍摄分辨率高
+	private Integer srcHeight;
+	//拍摄相机型号
+	private String srcCameraModel;
+	//拍摄相机镜头型号
+	private String srcLensModel;
 	//原图大小
 	private Long srcSize;
 	//原图拍摄相机品牌
@@ -44,7 +50,7 @@ public class Photo  {
 	//原图曝光时间
 	private String srcSValue;
 	//原图曝光补偿
-	private Integer srcEvValue;
+	private String srcEvValue;
 	//原图焦距
 	private Integer srcFValue;
 	//原图测光模式

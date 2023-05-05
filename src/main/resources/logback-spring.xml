@@ -1,112 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <!-- 彩色日志依赖的渲染类 -->
-    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
-    <conversionRule conversionWord="wex"
-                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
-    <conversionRule conversionWord="wEx"
-                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
-    <!-- 彩色日志格式 -->
-    <property name="CONSOLE_LOG_PATTERN"
-              value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+<property name="LOG_PATH" value="logs" />
+<property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %-40.40logger{39} : %msg%n" />
 
-    <!-- %m输出的信息,%p日志级别,%t线程名,%d日期,%c类的全名,%i索引【从数字0开始递增】,,, -->
-    <!-- appender是configuration的子节点，是负责写日志的组件。 -->
-    <!-- ConsoleAppender：把日志输出到控制台 -->
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <!--
-            <pattern>%d %p (%file:%line\)- %m%n</pattern>
-             -->
-            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
-            <!-- 控制台也要使用UTF-8，不要使用GBK，否则会中文乱码 -->
-            <charset>UTF-8</charset>
-        </encoder>
-    </appender>
+<!-- 控制台输出 -->
+<appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+    <!-- 彩色日志 -->
+    <layout class="ch.qos.logback.classic.PatternLayout">
+        <pattern>
+            %d{yyyy-MM-dd HH:mm:ss} [%thread] %magenta(%-5level) %green([%-50.50class]) >>> %cyan(%msg) %n
+        </pattern>
+    </layout>
+</appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>D:\logs\novel.log</File>
-        <!-- rollingPolicy:当发生滚动时，决定 RollingFileAppender 的行为，涉及文件移动和重命名。 -->
-        <!-- TimeBasedRollingPolicy： 最常用的滚动策略，它根据时间来制定滚动策略，既负责滚动也负责出发滚动 -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 活动文件的名字会根据fileNamePattern的值，每隔一段时间改变一次 -->
-            <!-- 文件名：logs/demo.2017-12-05.0.log -->
-            <fileNamePattern>logs/debug.%d.%i.log</fileNamePattern>
-            <!-- 每产生一个日志文件，该日志文件的保存期限为30天 -->
-            <maxHistory>30</maxHistory>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <!-- maxFileSize:这是活动文件的大小，默认值是10MB，测试时可改成1KB看效果 -->
-                <maxFileSize>10MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
-        </rollingPolicy>
-        <encoder>
-            <!-- pattern节点，用来设置日志的输入格式 -->
-            <pattern>
-                %d %p (%file:%line\)- %m%n
-            </pattern>
-            <!-- 记录日志的编码:此处设置字符集 - -->
-            <charset>UTF-8</charset>
-        </encoder>
-    </appender>
+<!-- 按照每天生成日志文件 -->
+<appender name="fileLog"  class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <!--日志文件输出的文件名-->
+        <FileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+        <!--日志文件最大的大小-->
+        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+            <maxFileSize>100MB</maxFileSize>
+        </timeBasedFileNamingAndTriggeringPolicy>
+        <!--日志文件保留天数-->
+        <MaxHistory>30</MaxHistory>
+    </rollingPolicy>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <pattern>${LOG_PATTERN}</pattern>
+    </encoder>
+</appender>
 
-    <!-- 级别依次为【从高到低】：FATAL > ERROR > WARN > INFO > DEBUG > TRACE -->
-    <logger name="org.apache" level="ERROR" additivity="false">
-        <appender-ref ref="STDOUT"/>
-    </logger>
-    <logger name="org.thymeleaf.TemplateEngine" level="ERROR" additivity="false">
-        <appender-ref ref="STDOUT"/>
-    </logger>
-    <logger name="o.s.b.f.s.DefaultListableBeanFactory" level="ERROR" additivity="false">
-        <appender-ref ref="STDOUT"/>
-    </logger>
+<!-- 级别依次为【从高到低】：FATAL > ERROR > WARN > INFO > DEBUG > TRACE -->
+<logger name="org.apache" level="ERROR" additivity="false">
+    <appender-ref ref="consoleLog"/>
+</logger>
+<logger name="org.thymeleaf.TemplateEngine" level="ERROR" additivity="false">
+    <appender-ref ref="consoleLog"/>
+</logger>
+<logger name="o.s.b.f.s.DefaultListableBeanFactory" level="ERROR" additivity="false">
+    <appender-ref ref="consoleLog"/>
+</logger>
 
-    <!--监控sql日志输出 -->
-    <logger name="jdbc.sqlonly" level="INFO" additivity="false">
-        <appender-ref ref="STDOUT" />
-    </logger>
-    <logger name="jdbc.resultset" level="ERROR" additivity="false">
-        <appender-ref ref="STDOUT" />
-    </logger>
-    <logger name="jdbc.resultsettable" level="INFO" additivity="false">
-        <appender-ref ref="STDOUT" />
-    </logger>
-    <logger name="jdbc.connection" level="OFF" additivity="false">
-        <appender-ref ref="STDOUT" />
-    </logger>
-    <logger name="jdbc.sqltiming" level="OFF" additivity="false">
-        <appender-ref ref="STDOUT" />
-    </logger>
-    <logger name="jdbc.audit" level="OFF" additivity="false">
-        <appender-ref ref="STDOUT" />
-    </logger>
+<!--监控sql日志输出 -->
+<logger name="jdbc.sqlonly" level="INFO" additivity="false">
+    <appender-ref ref="consoleLog" />
+</logger>
+<logger name="jdbc.resultset" level="ERROR" additivity="false">
+    <appender-ref ref="consoleLog" />
+</logger>
+<logger name="jdbc.resultsettable" level="INFO" additivity="false">
+    <appender-ref ref="consoleLog" />
+</logger>
+<logger name="jdbc.connection" level="OFF" additivity="false">
+    <appender-ref ref="consoleLog" />
+</logger>
+<logger name="jdbc.sqltiming" level="OFF" additivity="false">
+    <appender-ref ref="consoleLog" />
+</logger>
+<logger name="jdbc.audit" level="OFF" additivity="false">
+    <appender-ref ref="consoleLog" />
+</logger>
 
 
-    <springProfile name="dev">
-        <!-- ROOT 日志级别 -->
-        <root level="INFO">
-            <appender-ref ref="STDOUT"/>
-        </root>
-    </springProfile>
 
-    <springProfile name="prod">
-        <!-- ROOT 日志级别 -->
-        <root level="INFO">
-            <appender-ref ref="STDOUT"/>
-            <appender-ref ref="FILE"/>
-        </root>
-    </springProfile>
+
+<!-- 日志输出级别 -->
+<root level="info">
+    <appender-ref ref="consoleLog" />
+<!--    <appender-ref ref="fileLog" />-->
+</root>
+
 </configuration>
-<!--<configuration>-->
-
-<!--    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">-->
-<!--        &lt;!&ndash; encoders are assigned the type-->
-<!--             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default &ndash;&gt;-->
-<!--        <encoder>-->
-<!--            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%n</pattern>-->
-<!--        </encoder>-->
-<!--    </appender>-->
-
-<!--    <root level="debug">-->
-<!--        <appender-ref ref="STDOUT" />-->
-<!--    </root>-->
-<!--</configuration>-->

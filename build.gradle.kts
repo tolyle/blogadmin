@@ -39,11 +39,14 @@ dependencies {
     implementation("com.alibaba:druid:1.2.16")
 
     //集成log4jdbc 查看完整sql
-    implementation("org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16")
+    implementation("org.lazyluke:log4jdbc-remix:0.2.7")
     implementation("org.projectlombok:lombok:1.18.26")
     annotationProcessor("org.projectlombok:lombok:1.18.26")
 
-    // UidGenerator
+    // 照片元素据
+    implementation("com.drewnoakes:metadata-extractor:2.18.0")
+    //七牛云存储
+    implementation("com.qiniu:qiniu-java-sdk:7.7.0")
 
     // MySQL驱动, // druid连接池
     providedRuntime("com.mysql:mysql-connector-j")
@@ -52,8 +55,12 @@ dependencies {
 
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.4.0")
+    testImplementation("org.projectlombok:lombok:1.18.26")
+
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    systemProperty("file.encoding", "UTF-8")
 }
