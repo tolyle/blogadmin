@@ -1,5 +1,6 @@
 import org.hidetake.groovy.ssh.core.RunHandler
 import org.hidetake.groovy.ssh.session.SessionHandler
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     java
@@ -71,7 +72,8 @@ dependencies {
 
 }
 
-shadowJar {
+ShadowJar {
+
 
 }
 
