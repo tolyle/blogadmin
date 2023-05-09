@@ -1,6 +1,6 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.hidetake.groovy.ssh.core.RunHandler
 import org.hidetake.groovy.ssh.session.SessionHandler
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     java
@@ -72,9 +72,17 @@ dependencies {
 
 }
 
-ShadowJar {
 
+tasks {
+    System.setProperty("spring.profiles.active", "asdfasdfasfasdfsd");
 
+    named<ShadowJar>("shadowJar") {
+        archiveBaseName.set("shadow")
+        mergeServiceFiles()
+        manifest {
+            attributes(mapOf("Main-Class" to "org.lyle.Application"))
+        }
+    }
 }
 
 tasks.withType<Test> {
@@ -90,21 +98,20 @@ remotes {
             setProperty("user", "root")
             //ssh-keygen -t rsa -m PEM
             setProperty("identity", file("${System.getProperty("user.home")}/.ssh/id_rsa"))
-
-
         }
     }
 }
 
 
 tasks.register("deployToTencent") {
-    val tomcatPath = "/root/t/webapps";
+    val tomcatPath = "/root/";
+
     doLast {
         ssh.run(delegateClosureOf<RunHandler> {
             session(remotes["tencent"], delegateClosureOf<SessionHandler> {
-                println("上传war........")
-                put(hashMapOf("from" to "/Users/lyle.wang/IdeaProjects/blogadmin/build/libs/blogadmin-0.0.1-SNAPSHOT.war", "into" to "${tomcatPath}/deploy.war"))
-                execute("mv  ${tomcatPath}/deploy.war ${tomcatPath}/api.war");
+                println("上传jar........")
+                put(hashMapOf("from" to "${project.projectDir}/build/libs/blogadmin-0.0.1-SNAPSHOT.jar", "into" to "${tomcatPath}/api.jar"))
+                // execute("mv  ${tomcatPath}/deploy.war ${tomcatPath}/api.war");
                 //execute("/root/t/bin/shutdown.sh");
                 //execute("/root/t/bin/startup.sh");
 

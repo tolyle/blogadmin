@@ -1,9 +1,11 @@
 package org.lyle.utils.network;
+
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.util.StringUtils;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
 public class IpUtil {
 	public static String getIpAddr(HttpServletRequest request) {
 		if (request == null) {
@@ -155,5 +157,28 @@ public class IpUtil {
 		} catch (UnknownHostException ignored) {
 		}
 		return "未知";
+	}
+
+	public static boolean sameNetwork(String ip1, String ip2, String mask) {
+
+		try {
+			byte[] a1 = InetAddress.getByName(ip1).getAddress();
+			byte[] a2 = InetAddress.getByName(ip2).getAddress();
+			byte[] m = InetAddress.getByName(mask).getAddress();
+
+			for (int i = 0; i < a1.length; i++)
+				if ((a1[i] & m[i]) != (a2[i] & m[i]))
+					return false;
+
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+
+	}
+
+	public static void main(String[] args) {
+		System.out.println(sameNetwork("192.168.168.1", "192.168.168.10", "255.55.255.0"));
 	}
 }
