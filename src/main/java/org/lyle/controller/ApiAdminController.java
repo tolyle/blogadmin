@@ -5,7 +5,6 @@ import cn.hutool.core.io.resource.InputStreamResource;
 import cn.hutool.core.io.resource.MultiResource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.lyle.entity.Photo;
 import org.lyle.exception.BusinessException;
 import org.lyle.mapper.Page;
 import org.lyle.response.RR;
@@ -28,44 +27,43 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/admin")
 public class ApiAdminController {
-    @Autowired
-    private AdminPhotoService adminPhotoService;
+	@Autowired
+	private AdminPhotoService adminPhotoService;
 
 
-    @GetMapping(value = "/photoList")
-    public RR findPhoto(Long currentPage,String searchKey){
+	@GetMapping(value = "/photoList")
+	public RR findPhoto(Long currentPage, String searchKey) {
 
-        Page<Photo> page=adminPhotoService.findPhoto(searchKey,currentPage);
-        Map<String,Page<Photo>> map= new HashMap<>();
-        map.put("page",page);
+		Page page = adminPhotoService.findPhoto(searchKey, currentPage);
+		Map<String, Object> map = new HashMap<>();
+		map.put("page", page);
 
-        return RR.success(map);
-    }
-
-
-
-    @PostMapping(value = "/addPhoto")
-    public RR  savePhoto(HttpServletRequest request,
-                                 String title,
-                                 String tags,
-                                 MultipartFile[] files) {
-
-        log.info("receive data:{}", title);
-        log.info("receive data:{}", files.length);
-
-        MultiResource multiResource = new MultiResource(Arrays.stream(files).map(multipartFile -> {
-            try {
-                log.info("上传文件名,{},文件大小,{}M", multipartFile.getOriginalFilename(), multipartFile.getSize() / 1024 / 1024);
-                adminPhotoService.savePhoto(multipartFile, title, tags);
-                return new InputStreamResource(multipartFile.getInputStream(), multipartFile.getOriginalFilename());
-            } catch (IOException e) {
-                throw new BusinessException("输入流打开失败", e);
-            }
-        }).collect(Collectors.toList()));
+		return RR.success(map);
+	}
 
 
-        return RR.success();
-    }
+	@PostMapping(value = "/addPhoto")
+	public RR savePhoto(HttpServletRequest request,
+			    String title,
+			    String tags,
+			    MultipartFile[] files) {
+
+		log.info("receive data:{}", title);
+		log.info("receive data:{}", files.length);
+
+		MultiResource multiResource = new MultiResource(Arrays.stream(files).map(multipartFile -> {
+			try {
+				log.info("上传文件名,{},文件大小,{}M", multipartFile.getOriginalFilename(), multipartFile.getSize() / 1024 / 1024);
+				adminPhotoService.savePhoto(multipartFile, title, tags);
+				return new InputStreamResource(multipartFile.getInputStream(), multipartFile.getOriginalFilename());
+			} catch (IOException e) {
+				throw new BusinessException("输入流打开失败", e);
+			}
+		}).collect(Collectors.toList()));
+
+
+		return RR.success();
+	}
 
 
 }
