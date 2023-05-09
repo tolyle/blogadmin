@@ -97,6 +97,29 @@ public class Dal implements ApplicationContextAware {
 			String msId = execute(sql, table.getEntityClass(), resultType, SqlCommandType.SELECT);
 			return sqlSession.selectOne(msId, criteria);
 		}
+		public List<E> addWhere(String sql) {
+
+			String sql2 = new BaseMapper.AddWhereProvider().buildSql(sql, this.table);
+			String msId = execute(sql2, table.getEntityClass(), resultType, SqlCommandType.SELECT);
+			return sqlSession.selectList(msId, null);
+		}
+
+
+		public List<E> addWherePage(String sql,Integer offSet,Integer limit){
+
+			Map<String,Object> param = new HashMap<>();
+			param.put("where",sql);
+			param.put("offSet",offSet);
+			param.put("limit",limit);
+
+
+			String sql2 = new BaseMapper.AddWherePageProvider().buildSql(param, this.table);
+			String msId = execute(sql2, table.getEntityClass(), resultType, SqlCommandType.SELECT);
+			return sqlSession.selectList(msId, null);
+		}
+
+
+
 		@Override
 		public E selectOne(E criteria) {
 			String sql = new BaseMapper.SelectByCriteriaSqlProvider().buildSql(criteria, this.table);
@@ -112,6 +135,9 @@ public class Dal implements ApplicationContextAware {
 			String msId = execute(sql, table.getEntityClass(), resultType, SqlCommandType.SELECT);
 			return sqlSession.selectList(msId, criteria);
 		}
+
+
+
 		@Override
 		public Long count(E criteria) {
 			String sql = new BaseMapper.CountByCriteriaSqlProvider().buildSql(criteria, this.table);
@@ -148,9 +174,11 @@ public class Dal implements ApplicationContextAware {
 			String msId = execute(sql, table.getEntityClass(), int.class, SqlCommandType.DELETE);
 			return sqlSession.delete(msId, criteria);
 		}
+
 		public List<E> sqlQuery(String sql, Object param, Class<?> resultType) {
 			return sqlQuery(sql, param, param != null ? param.getClass() : Map.class, resultType);
 		}
+
 		public List<E> sqlQuery(String sql, Object param, Class<?> paramType, Class<?> resultType) {
 			String msId = execute(sql, paramType, resultType, SqlCommandType.SELECT);
 			List<E>  list = sqlSession.selectList(msId, param);

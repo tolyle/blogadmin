@@ -4,6 +4,8 @@ import org.apache.ibatis.annotations.*;
 import org.lyle.entity.Photo;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Mapper
 @Transactional
 public interface PhotoMapper {
@@ -19,4 +21,16 @@ public interface PhotoMapper {
 
     long  savePhoto(Photo photo);
 
+    @Select({"<script>",
+            "select",
+            " * ",
+            "from photo",
+            "where 1=1  ",
+            "<if test='!searchKey'>and title like '%${searchKey}%' </if>  ",
+            "order by id desc  ",
+            "LIMIT #{startRow},#{endRow}",
+            "</script> "})
+    List<Photo> findPhoto(String searchKey,Integer startRow,Integer endRow);
+
+    Long findPhotoCount();
 }

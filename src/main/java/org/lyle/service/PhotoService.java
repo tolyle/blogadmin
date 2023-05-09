@@ -96,41 +96,6 @@ public class PhotoService {
 
 			}
 
-
-//			Iterable<ExifSubIFDDirectory> exifSubIFDDirectory = metadata.getDirectoriesOfType(ExifSubIFDDirectory.class);
-//			Iterator<ExifSubIFDDirectory> subIFDDirectoryIterator = exifSubIFDDirectory.iterator();
-//			if (subIFDDirectoryIterator.hasNext()) {
-//				ExifSubIFDDirectory dr = subIFDDirectoryIterator.next();
-//
-//				System.out.println("********drdrdrdrdrdr************************************************" + dr.getName());
-//
-//
-//				if (dr.containsTag(ExifSubIFDDirectory.TAG_LENS)) {
-//					System.out.println("********************************************************" + dr.getDescription(ExifSubIFDDirectory.TAG_LENS));
-//				} else if (dr.containsTag(ExifSubIFDDirectory.TAG_IMAGE_WIDTH)) {
-//					System.out.println("********************************************************" + dr.getDescription(ExifSubIFDDirectory.TAG_IMAGE_WIDTH));
-//				} else if (dr.containsTag(ExifSubIFDDirectory.TAG_IMAGE_HEIGHT)) {
-//					System.out.println("********************************************************" + dr.getDescription(ExifSubIFDDirectory.TAG_IMAGE_HEIGHT));
-//				} else if (dr.containsTag(ExifSubIFDDirectory.TAG_MAKE)) {
-//					System.out.println("********************************************************" + dr.getDescription(ExifSubIFDDirectory.TAG_MAKE));
-//				} else if (dr.containsTag(ExifSubIFDDirectory.TAG_MODEL)) {
-//					System.out.println("********************************************************" + dr.getDescription(ExifSubIFDDirectory.TAG_MODEL));
-//				} else if (dr.containsTag(ExifSubIFDDirectory.TAG_FNUMBER)) {
-//					System.out.println("********************************************************" + dr.getDescription(ExifSubIFDDirectory.TAG_FNUMBER));
-//				} else if (dr.containsTag(ExifSubIFDDirectory.TAG_ISO_SPEED)) {
-//					System.out.println("********************************************************" + dr.getDescription(ExifSubIFDDirectory.TAG_ISO_SPEED));
-//				} else if (dr.containsTag(ExifSubIFDDirectory.TAG_EXPOSURE_TIME)) {
-//					System.out.println("********************************************************" + dr.getDescription(ExifSubIFDDirectory.TAG_EXPOSURE_TIME));
-//				} else if (dr.containsTag(ExifSubIFDDirectory.TAG_EXPOSURE_BIAS)) {
-//					System.out.println("********************************************************" + dr.getDescription(ExifSubIFDDirectory.TAG_EXPOSURE_BIAS));
-//				} else if (dr.containsTag(ExifSubIFDDirectory.TAG_METERING_MODE)) {
-//					System.out.println("********************************************************" + dr.getDescription(ExifSubIFDDirectory.TAG_METERING_MODE));
-//				} else if (dr.containsTag(ExifSubIFDDirectory.TAG_LENS_MODEL)) {
-//					System.out.println("********************************************************" + dr.getDescription(ExifSubIFDDirectory.TAG_LENS_MODEL));
-//				}
-//			}
-//
-
 			System.out.println("===============" + photo);
 
 			baseMapper.insert(photo);

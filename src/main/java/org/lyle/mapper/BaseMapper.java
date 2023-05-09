@@ -39,11 +39,17 @@ public interface BaseMapper<Entity> {
 	@DeleteProvider(type = DeleteSqlProvider.class, method = "invoke")
 	Integer deleteById(Serializable id);
 
+
 	@DeleteProvider(type = DeleteByCriteriaSqlProvider.class, method = "invoke")
 	Integer delete(Entity criteria);
 
 	@SelectProvider(type = SelectByIdSqlProvider.class, method = "invoke")
 	Entity selectById(Serializable id);
+
+	@SelectProvider(type = AddWhereProvider.class, method = "invoke")
+	List<Entity> addWhere(String sql);
+
+
 
 	@SelectProvider(type = SelectAllSqlProvider.class, method = "invoke")
 	List<Entity> selectAll(String orderBy);
@@ -56,6 +62,10 @@ public interface BaseMapper<Entity> {
 
 	@SelectProvider(type = SelectInSqlProvider.class, method = "invoke")
 	List<Entity> selectByColumn(@Param("column") String column, @Param("array") Serializable[] ids);
+
+	@SelectProvider(type = AddWherePageProvider.class, method = "invoke")
+	List<Entity> addWherePage(@Param("sql") String sql,@Param("offSet") Integer offSet,@Param("limit") Integer limit);
+
 
 	@SelectProvider(type = CountByCriteriaSqlProvider.class, method = "invoke")
 	Long count(Entity criteria);
@@ -135,6 +145,9 @@ public interface BaseMapper<Entity> {
 		}
 	}
 
+
+
+
 	class DeleteByCriteriaSqlProvider extends AbstractSqlProviderSupport implements WriteType {
 		@Override
 		public SQL sql(Object criteria, ProviderContext context) {
@@ -153,6 +166,17 @@ public interface BaseMapper<Entity> {
 				.WHERE(table.getPrimaryKeyColumn() + " = #{id}");
 		}
 	}
+	class AddWhereProvider extends AbstractSqlProviderSupport{
+		@Override
+		public SQL sql(Object criteria, ProviderContext context) {
+			return new SQL()
+					.SELECT(table.getSelectColumns())
+					.FROM(table.getTableName())
+					.WHERE(criteria.toString());
+		}
+	}
+
+
 
 	class SelectAllSqlProvider extends AbstractSqlProviderSupport {
 		@Override
@@ -183,6 +207,32 @@ public interface BaseMapper<Entity> {
 				.WHERE(where);
 		}
 	}
+
+	class AddWherePageProvider extends AbstractSqlProviderSupport{
+		@Override
+		public SQL sql(Object entities, ProviderContext context) {
+			Map<String, Object> param = (Map)entities;
+			String where = (String)param.get("where");
+			Integer offSet = (Integer)param.get("offSet");
+			Integer limit = (Integer)param.get("limit");
+
+			System.out.println("where=============="+where);
+
+			SQL sql = new SQL()
+					.SELECT(table.getSelectColumns())
+					.FROM(table.getTableName())
+					.WHERE(where)
+					.OFFSET(offSet)
+					.LIMIT(limit);
+
+			System.out.println("where=============="+sql.toString());
+
+
+			return sql;
+		}
+	}
+
+
 
 	class SelectByCriteriaSqlProvider extends AbstractSqlProviderSupport {
 		@Override

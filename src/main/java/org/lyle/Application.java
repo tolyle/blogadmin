@@ -7,26 +7,45 @@ import org.lyle.mapper.BaseMapper;
 import org.lyle.mapper.Dal;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.InjectionPoint;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.ResolvableType;
+import org.springframework.core.env.Environment;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.List;
 
-@SpringBootApplication(scanBasePackages ={"org.lyle","com.baidu"})
+@SpringBootApplication(scanBasePackages = {"org.lyle", "com.baidu"})
 public class Application {
+
 
     @Resource
     SqlSession sqlSession;
 
     public static void main(String[] args) {
+
+        System.out.println("datasource.url = ");
+
         SpringApplication.run(Application.class, args);
+        SpringApplication app = new SpringApplication(Application.class);
+        //app.setAdditionalProfiles("dev");
+        ConfigurableApplicationContext context = app.run(args);
+
+        System.out.println("datasource.url = " + context.getEnvironment());
+
 
     }
 
@@ -37,6 +56,7 @@ public class Application {
         Class<E> parameterClass = (Class<E>) resolved.getGeneric(0).resolve();
         return Dal.with(parameterClass, sqlSession);
     }
+
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
@@ -46,17 +66,13 @@ public class Application {
             String[] beanNames = ctx.getBeanDefinitionNames();
             Arrays.sort(beanNames);
             for (String beanName : beanNames) {
-               //System.out.println(beanName);
+                //System.out.println(beanName);
             }
             System.out.println("==========Let's inspect the beans provided by Spring Boot end==============:");
 
         };
     }
-//
-//    @Bean
-//    public Jackson2ObjectMapperBuilderCustomizer customizer(){
-//        return builder -> builder.featuresToEnable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
-//    }
+
 
 }
 

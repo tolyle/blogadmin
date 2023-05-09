@@ -1,10 +1,15 @@
+import org.hidetake.groovy.ssh.core.RunHandler
+import org.hidetake.groovy.ssh.session.SessionHandler
+
 plugins {
     java
     war
     id("org.springframework.boot") version "3.0.6"
     id("io.spring.dependency-management") version "1.1.0"
-}
+    id("org.hidetake.ssh") version "2.10.1"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 
+}
 group = "org.lyle"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
@@ -16,7 +21,11 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-web") {
+        exclude("org.springframework.boot", "spring-boot-starter-json")
+    }
+
+
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-devtools")
 
@@ -47,11 +56,13 @@ dependencies {
     implementation("com.drewnoakes:metadata-extractor:2.18.0")
     //七牛云存储
     implementation("com.qiniu:qiniu-java-sdk:7.7.0")
+    //fastjson
+    implementation("com.alibaba.fastjson2:fastjson2:2.0.30")
+    implementation("com.alibaba.fastjson2:fastjson2-extension-spring6:2.0.30")
 
     // MySQL驱动, // druid连接池
     providedRuntime("com.mysql:mysql-connector-j")
     implementation("com.alibaba:druid:1.2.16")
-
 
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -60,7 +71,43 @@ dependencies {
 
 }
 
+shadowJar {
+
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
     systemProperty("file.encoding", "UTF-8")
 }
+
+
+remotes {
+    withGroovyBuilder {
+        "create"("tencent") {
+            setProperty("host", "118.126.88.185")
+            setProperty("user", "root")
+            //ssh-keygen -t rsa -m PEM
+            setProperty("identity", file("${System.getProperty("user.home")}/.ssh/id_rsa"))
+
+
+        }
+    }
+}
+
+
+tasks.register("deployToTencent") {
+    val tomcatPath = "/root/t/webapps";
+    doLast {
+        ssh.run(delegateClosureOf<RunHandler> {
+            session(remotes["tencent"], delegateClosureOf<SessionHandler> {
+                println("上传war........")
+                put(hashMapOf("from" to "/Users/lyle.wang/IdeaProjects/blogadmin/build/libs/blogadmin-0.0.1-SNAPSHOT.war", "into" to "${tomcatPath}/deploy.war"))
+                execute("mv  ${tomcatPath}/deploy.war ${tomcatPath}/api.war");
+                //execute("/root/t/bin/shutdown.sh");
+                //execute("/root/t/bin/startup.sh");
+
+            })
+        })
+    }
+}
+
