@@ -3,11 +3,13 @@ package org.lyle.controller;
 
 import cn.hutool.core.io.resource.InputStreamResource;
 import cn.hutool.core.io.resource.MultiResource;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.lyle.controller.response.RR;
+import org.lyle.entity.Photo;
 import org.lyle.exception.BusinessException;
-import org.lyle.mapper.Page;
-import org.lyle.response.RR;
+import org.lyle.mapper.PhotoMapper;
 import org.lyle.service.AdminPhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -30,15 +30,17 @@ public class ApiAdminController {
 	@Autowired
 	private AdminPhotoService adminPhotoService;
 
+	@Autowired
+	private PhotoMapper photoMapper;
 
 	@GetMapping(value = "/photoList")
 	public RR findPhoto(Long currentPage, String searchKey) {
+		Page<Photo> papge = new Page<>();
+		papge.setCurrent(1);
+		papge.setSize(10);
+		Page<Photo> page = photoMapper.selectPage(papge, null);
 
-		Page page = adminPhotoService.findPhoto(searchKey, currentPage);
-		Map<String, Object> map = new HashMap<>();
-		map.put("page", page);
-
-		return RR.success(map);
+		return RR.success(page);
 	}
 
 

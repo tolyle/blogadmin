@@ -1,32 +1,25 @@
 package org.lyle;
 
 
-import jakarta.annotation.Resource;
-import org.apache.ibatis.session.SqlSession;
-import org.lyle.mapper.BaseMapper;
-import org.lyle.mapper.Dal;
+import lombok.extern.slf4j.Slf4j;
 import org.lyle.utils.network.IpUtil;
-import org.springframework.beans.factory.InjectionPoint;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.ApplicationPidFileWriter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Scope;
-import org.springframework.core.ResolvableType;
 import org.springframework.core.env.AbstractEnvironment;
 
 import java.util.Arrays;
 
 
+@Slf4j
 @SpringBootApplication(scanBasePackages = {"org.lyle", "com.baidu"})
+
+
 public class Application {
 
-
-	@Resource
-	SqlSession sqlSession;
 
 	public static void main(String[] args) {
 
@@ -43,16 +36,17 @@ public class Application {
 		app.addListeners(new ApplicationPidFileWriter("api.pid"));
 		app.run(args);
 
+		log.info("启动成功,运行环境为{}", System.getProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME));
 
 	}
 
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public <E> BaseMapper<E> simpleBaseMapper(InjectionPoint ip) {
-		ResolvableType resolved = ResolvableType.forField(ip.getField());
-		Class<E> parameterClass = (Class<E>) resolved.getGeneric(0).resolve();
-		return Dal.with(parameterClass, sqlSession);
-	}
+//	@Bean
+//	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+//	public <E> BaseMapper<E> simpleBaseMapper(InjectionPoint ip) {
+//		ResolvableType resolved = ResolvableType.forField(ip.getField());
+//		Class<E> parameterClass = (Class<E>) resolved.getGeneric(0).resolve();
+//		return Dal.with(parameterClass, sqlSession);
+//	}
 
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {

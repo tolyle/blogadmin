@@ -3,21 +3,15 @@ package org.lyle.controller;
 
 import cn.hutool.core.io.resource.InputStreamResource;
 import cn.hutool.core.io.resource.MultiResource;
-import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.lyle.entity.Photo;
 import org.lyle.exception.BusinessException;
-import org.lyle.mapper.BaseMapper;
-import org.lyle.mapper.PhotoMapper;
-import org.lyle.service.IdService;
 import org.lyle.service.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,27 +24,19 @@ import java.util.stream.Collectors;
 @Slf4j
 @Controller
 public class TestController {
-    @Autowired
-    private PhotoService photoService;
-    @Autowired
-    PhotoMapper photoMapper;
-
-    @Resource
-    private IdService idService;
+	@Autowired
+	private PhotoService photoService;
 
 
-    @Resource
-    BaseMapper<Photo> baseMapper;
+	@RequestMapping("/test")
+	String show() {
 
-    @RequestMapping("/test")
-    String show() {
-
-        //	Dal.with(Photo.class).select(map);
+		//	Dal.with(Photo.class).select(map);
 
 
-        log.info("hello @Sfl4j + logback......");
+		log.info("hello @Sfl4j + logback......");
 
-        log.info("进入到dasdfddddd......进入到dasdfddddd......进入到dasdfddddd......进入到dasdfddddd......进入到dasdfddddd......进入到dasdfddddd......进入到dasdfddddd......进入到dasdfddddd......");
+		log.info("进入到dasdfddddd......进入到dasdfddddd......进入到dasdfddddd......进入到dasdfddddd......进入到dasdfddddd......进入到dasdfddddd......进入到dasdfddddd......进入到dasdfddddd......");
 //		System.out.print(userBaseMapper.select(map).get(0));
 //
 //
@@ -58,63 +44,63 @@ public class TestController {
 //		//photoService.login("adsfasdf");
 //		logger.info("进入到dasdfddddd......");
 //		logger.info(photoMapper.getPhoto(2).getId().toString());
-        return "test";
-    }
+		return "test";
+	}
 
-    @RequestMapping("/addPhoto")
-    String addPhoto() {
-        return "addPhoto";
-    }
+	@RequestMapping("/addPhoto")
+	String addPhoto() {
+		return "addPhoto";
+	}
 
-    @RequestMapping("/addPhoto2")
-    String addPhoto2() {
-        return "addPhoto2";
-    }
-
-
-    @PostMapping("/api/upload")
-    String savePhoto2(HttpServletRequest request,
-                      String title,
-                      String tags,
-                      MultipartFile[] files) {
-
-        log.info("receive data:{}", title);
-        log.info("receive data:{}", files.length);
+	@RequestMapping("/addPhoto2")
+	String addPhoto2() {
+		return "addPhoto2";
+	}
 
 
-        MultiResource multiResource = new MultiResource(Arrays.stream(files).map(multipartFile -> {
-            try {
-                log.info("上传文件名,{},文件大小,{}M", multipartFile.getOriginalFilename(), multipartFile.getSize() / 1024 / 1024);
-                photoService.savePhoto(multipartFile, title, tags);
-                return new InputStreamResource(multipartFile.getInputStream(), multipartFile.getOriginalFilename());
-            } catch (IOException e) {
-                throw new BusinessException("输入流打开失败", e);
-            }
-        }).collect(Collectors.toList()));
+	@PostMapping("/api/upload")
+	String savePhoto2(HttpServletRequest request,
+			  String title,
+			  String tags,
+			  MultipartFile[] files) {
+
+		log.info("receive data:{}", title);
+		log.info("receive data:{}", files.length);
 
 
-        return "ok";
-    }
+		MultiResource multiResource = new MultiResource(Arrays.stream(files).map(multipartFile -> {
+			try {
+				log.info("上传文件名,{},文件大小,{}M", multipartFile.getOriginalFilename(), multipartFile.getSize() / 1024 / 1024);
+				photoService.savePhoto(multipartFile, title, tags);
+				return new InputStreamResource(multipartFile.getInputStream(), multipartFile.getOriginalFilename());
+			} catch (IOException e) {
+				throw new BusinessException("输入流打开失败", e);
+			}
+		}).collect(Collectors.toList()));
 
 
-    @RequestMapping("/api/savePhoto")
-    @ResponseBody
-    Map<String, Object> savePhoto(MultipartFile[] files, String title, String tags) {
-        Map<String, Object> result = new HashMap<String, Object>();
+		return "ok";
+	}
 
-        if (StringUtils.isBlank(files[0].getOriginalFilename())) {
-            throw new BusinessException("未选择文件");
-        }
 
-        MultiResource multiResource = new MultiResource(Arrays.stream(files).map(multipartFile -> {
-            try {
-                log.info("上传文件名,{},文件大小,{}M", multipartFile.getOriginalFilename(), multipartFile.getSize() / 1024 / 1024);
-                photoService.savePhoto(multipartFile, title, tags);
-                return new InputStreamResource(multipartFile.getInputStream(), multipartFile.getOriginalFilename());
-            } catch (IOException e) {
-                throw new BusinessException("输入流打开失败", e);
-            }
-        }).collect(Collectors.toList()));
+	@RequestMapping("/api/savePhoto")
+	@ResponseBody
+	Map<String, Object> savePhoto(MultipartFile[] files, String title, String tags) {
+		Map<String, Object> result = new HashMap<String, Object>();
+
+		if (StringUtils.isBlank(files[0].getOriginalFilename())) {
+			throw new BusinessException("未选择文件");
+		}
+
+		MultiResource multiResource = new MultiResource(Arrays.stream(files).map(multipartFile -> {
+			try {
+				log.info("上传文件名,{},文件大小,{}M", multipartFile.getOriginalFilename(), multipartFile.getSize() / 1024 / 1024);
+				photoService.savePhoto(multipartFile, title, tags);
+				return new InputStreamResource(multipartFile.getInputStream(), multipartFile.getOriginalFilename());
+			} catch (IOException e) {
+				throw new BusinessException("输入流打开失败", e);
+			}
+		}).collect(Collectors.toList()));
 
 
 //		Iterator<String> fileNames = request.getFileNames();
@@ -132,7 +118,7 @@ public class TestController {
 //				}
 //			}
 //		}
-        return result;
-    }
+		return result;
+	}
 
 }

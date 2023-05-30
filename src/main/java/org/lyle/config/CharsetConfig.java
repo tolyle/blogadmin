@@ -1,4 +1,4 @@
-package org.lyle.controller;
+package org.lyle.config;
 
 
 import com.alibaba.fastjson2.JSONReader;

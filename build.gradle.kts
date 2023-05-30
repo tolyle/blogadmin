@@ -11,7 +11,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
 
 }
-group = "org.lyle"
+group = "org.lyle.blogadmin"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
@@ -60,6 +60,9 @@ dependencies {
     //fastjson
     implementation("com.alibaba.fastjson2:fastjson2:2.0.30")
     implementation("com.alibaba.fastjson2:fastjson2-extension-spring6:2.0.30")
+
+    //mybatis plus
+    implementation("com.baomidou:mybatis-plus-boot-starter:3.5.3.1")
 
     // MySQL驱动, // druid连接池
     providedRuntime("com.mysql:mysql-connector-j")

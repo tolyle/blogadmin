@@ -7,10 +7,8 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.jpeg.JpegDirectory;
-import jakarta.annotation.Resource;
 import org.lyle.entity.Photo;
 import org.lyle.exception.QiNiuException;
-import org.lyle.mapper.BaseMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -25,25 +23,21 @@ import java.util.Date;
 public class PhotoService {
 	Logger logger = LoggerFactory.getLogger(PhotoService.class);
 
-	@Resource
-	private BaseMapper<Photo> baseMapper;
-	@Resource
-	private IdService idService;
-
 
 	public void savePhoto(MultipartFile multipartFile, String title, String tags) {
 
+		long id = 2;
 		//上传文件
 		try {
 			String fileName = multipartFile.getOriginalFilename();
 			String fileExt = FileUtil.extName(fileName);
-			String newFileName = idService.getId() + "." + fileExt;
+			String newFileName = id + "." + fileExt;
 			long size = multipartFile.getSize() / 1024;
 			logger.info("save photo,file name:{},file size:{}", newFileName, size);
 			FileUtil.writeFromStream(multipartFile.getInputStream(), "d:\\" + newFileName);
 
 			Photo photo = new Photo();
-			photo.setId(idService.getId());
+			photo.setId(id);
 			photo.setCreateTime(new Date());
 			photo.setTitle(title);
 			photo.setTags(tags);
@@ -98,7 +92,6 @@ public class PhotoService {
 
 			System.out.println("===============" + photo);
 
-			baseMapper.insert(photo);
 
 		} catch (Exception e) {
 			throw new QiNiuException(e);

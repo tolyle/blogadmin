@@ -7,13 +7,9 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.jpeg.JpegDirectory;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.lyle.entity.Photo;
 import org.lyle.exception.QiNiuException;
-import org.lyle.mapper.Page;
-import org.lyle.mapper.PhotoDao;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,24 +18,12 @@ import java.util.Date;
 
 @Slf4j
 @Service
-public class AdminPhotoService extends BaseService {
-
-	@Resource
-	private PhotoDao photoDao;
-
-
-	public Page findPhoto(String searchKey, Long currentPage) {
-		String sqls = "select * from photo  order by id desc";
-		if (!StringUtils.isBlank(searchKey)) {
-			sqls = "select * from photo where title like '%" + searchKey + "%' order by id desc";
-		}
-		return photoDao.pageRows(currentPage, 10L, sqls);
-	}
+public class AdminPhotoService {
 
 
 	public void savePhoto(MultipartFile multipartFile, String title, String tags) {
 
-		long id = getId();
+		long id = 2;
 		//上传文件
 		try {
 			String fileName = multipartFile.getOriginalFilename();
