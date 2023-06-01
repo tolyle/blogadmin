@@ -30,7 +30,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-devtools")
 
-    implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.1")
+    //implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.1")
 
     implementation("cn.hutool:hutool-all:5.8.15")
     //    //Apache工具组件
@@ -55,6 +55,8 @@ dependencies {
 
     // 照片元素据
     implementation("com.drewnoakes:metadata-extractor:2.18.0")
+    // 缩略图
+    implementation("net.coobird:thumbnailator:0.4.19")
     //七牛云存储
     implementation("com.qiniu:qiniu-java-sdk:7.7.0")
     //fastjson
