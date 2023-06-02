@@ -6,7 +6,6 @@ import org.lyle.blogadmin.utils.network.IpUtil;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.ApplicationPidFileWriter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.AbstractEnvironment;
@@ -33,7 +32,7 @@ public class Application {
 			System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "prod");
 		}
 
-		app.addListeners(new ApplicationPidFileWriter("api.pid"));
+		//app.addListeners(new ApplicationPidFileWriter("api.pid"));
 		app.run(args);
 
 		log.info("启动成功,运行环境为{}", System.getProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME));

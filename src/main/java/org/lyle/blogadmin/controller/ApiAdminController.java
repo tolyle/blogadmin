@@ -34,11 +34,9 @@ public class ApiAdminController {
 	private PhotoMapper photoMapper;
 
 	@GetMapping(value = "/photoList")
-	public RR findPhoto(Long currentPage, String searchKey) {
-		Page<Photo> papge = new Page<>();
-		papge.setCurrent(currentPage);
-		papge.setSize(10);
-		Page<Photo> page = photoMapper.selectPage(papge, null);
+	public RR findPhoto(Integer currentPage, String searchKey) {
+
+		Page<Photo> page = adminPhotoService.getPhoto(currentPage);
 
 		return RR.success(page);
 	}

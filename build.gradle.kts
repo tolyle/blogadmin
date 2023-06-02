@@ -109,6 +109,7 @@ remotes {
 
 
 tasks.register("deployToTencent") {
+
     val tomcatPath = "/root/";
 
     doLast {
@@ -118,7 +119,7 @@ tasks.register("deployToTencent") {
                 put(hashMapOf("from" to "${project.projectDir}/build/libs/blogadmin-0.0.1-SNAPSHOT.jar", "into" to "${tomcatPath}/api.jar"))
                 // execute("mv  ${tomcatPath}/deploy.war ${tomcatPath}/api.war");
                 //execute("/root/t/bin/shutdown.sh");
-                //execute("/root/t/bin/startup.sh");
+                execute("/root/api.sh");
 
             })
         })

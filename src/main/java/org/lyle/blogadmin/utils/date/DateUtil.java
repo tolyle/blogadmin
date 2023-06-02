@@ -1,7 +1,6 @@
 package org.lyle.blogadmin.utils.date;
 
 
-
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.lang.management.ManagementFactory;
@@ -60,6 +59,10 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
 
 	public static String dateTime(final Date date) {
 		return parseDateToStr(YYYY_MM_DD, date);
+	}
+
+	public static String dateAndTime(final Date date) {
+		return parseDateToStr(YYYY_MM_DD_HH_MM_SS, date);
 	}
 
 	public static String parseDateToStr(final String format, final Date date) {
