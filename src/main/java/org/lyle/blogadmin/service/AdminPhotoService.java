@@ -52,7 +52,7 @@ public class AdminPhotoService extends ServiceImpl<PhotoMapper, Photo> {
 		return page;
 	}
 
-	public void savePhoto(MultipartFile multipartFile, String title, String tags) throws QiNiuException, IOException {
+	public void savePhoto(MultipartFile multipartFile, String title, String tags, String spot) throws QiNiuException, IOException {
 
 		String uuid = IdUtil.simpleUUID();
 		//上传文件
@@ -86,6 +86,7 @@ public class AdminPhotoService extends ServiceImpl<PhotoMapper, Photo> {
 		photo.setTags(tags);
 		photo.setSrcSize(size);
 
+		photo.setPhotoTouristSpot(spot);
 		photo.setThumbnailUrl(thumbFileName);
 		photo.setThumbnailWidth(img.getWidth());
 		photo.setThumbnailHeight(img.getHeight());

@@ -1,4 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.hidetake.groovy.ssh.core.RunHandler
 import org.hidetake.groovy.ssh.session.SessionHandler
 
@@ -8,7 +7,6 @@ plugins {
     id("org.springframework.boot") version "3.0.6"
     id("io.spring.dependency-management") version "1.1.0"
     id("org.hidetake.ssh") version "2.10.1"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
 
 }
 group = "org.lyle.blogadmin"
@@ -78,18 +76,6 @@ dependencies {
 }
 
 
-tasks {
-    System.setProperty("spring.profiles.active", "asdfasdfasfasdfsd");
-
-    named<ShadowJar>("shadowJar") {
-        archiveBaseName.set("shadow")
-        mergeServiceFiles()
-        manifest {
-            attributes(mapOf("Main-Class" to "org.lyle.Application"))
-        }
-    }
-}
-
 tasks.withType<Test> {
     useJUnitPlatform()
     systemProperty("file.encoding", "UTF-8")
@@ -111,7 +97,7 @@ remotes {
 tasks.register("deployToTencent") {
 
     val tomcatPath = "/root/";
-
+    dependsOn(tasks.bootJar)
     doLast {
         ssh.run(delegateClosureOf<RunHandler> {
             session(remotes["tencent"], delegateClosureOf<SessionHandler> {
