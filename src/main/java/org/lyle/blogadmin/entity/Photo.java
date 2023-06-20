@@ -58,6 +58,7 @@ public class Photo {
 	//原图闪光模式
 	private String srcFlashMode;
 	private Date createTime;
+	private Integer clickTimes;
 
 
 }

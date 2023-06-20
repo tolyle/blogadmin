@@ -1,6 +1,7 @@
 package org.lyle.blogadmin;
 
 import org.junit.jupiter.api.Test;
+import org.lyle.blogadmin.service.AdminPhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +27,9 @@ public class AddPhotoTest {
 	@Autowired
 	private WebApplicationContext webApplicationContext;
 
+	@Autowired
+	private AdminPhotoService adminPhotoService;
+
 	@Test
 	public void addPhoto() throws Exception {
 		String url = "/api/admin/addPhoto";
@@ -49,6 +53,11 @@ public class AddPhotoTest {
 		}
 
 
+	}
+
+	@Test
+	public void clickTimes() {
+		adminPhotoService.updateClickTimes(1670323069257961473L);
 	}
 
 }

@@ -23,6 +23,11 @@ public class PhotoController {
 	@Autowired
 	private AdminPhotoService adminPhotoService;
 
+	@GetMapping(value = "/echo")
+	public RR echo() {
+		return RR.success();
+	}
+
 	@GetMapping(value = "/index")
 	public RR findPhoto(Integer currentPage) {
 		Page<Photo> page = adminPhotoService.getPhoto(currentPage);
@@ -40,8 +45,8 @@ public class PhotoController {
 			photoVo.setIsoValue(item.getSrcIsoValue());
 			photoVo.setFValue(item.getSrcFValue());
 			photoVo.setSValue(item.getSrcSValue());
-			photoVo.setHeight(item.getSrcHeight());
-			photoVo.setWidth(item.getSrcWidth());
+			photoVo.setHeight(item.getThumbnailHeight());
+			photoVo.setWidth(item.getThumbnailWidth());
 			photoVo.setRating("1");
 			photoVo.setFlashMode(item.getSrcFlashMode());
 			photoVo.setSize(item.getSrcSize() / 1024);
@@ -50,6 +55,7 @@ public class PhotoController {
 			photoVo.setTitle(item.getTitle());
 			photoVo.setResolution(item.getSrcWidth() + "*" + item.getSrcHeight());
 			photoVo.setLens(item.getSrcLensModel());
+			photoVo.setPhotoTouristSpot(item.getPhotoTouristSpot());
 			list.add(photoVo);
 
 		});

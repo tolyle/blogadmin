@@ -2,6 +2,7 @@ package org.lyle.blogadmin.service;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.drew.imaging.ImageMetadataReader;
@@ -10,6 +11,7 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.jpeg.JpegDirectory;
+import com.qiniu.common.QiniuException;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
 import org.lyle.blogadmin.config.Constants;
@@ -34,11 +36,22 @@ import java.util.Date;
 public class AdminPhotoService extends ServiceImpl<PhotoMapper, Photo> {
 
 
+	public void deleteById(Long id) throws QiniuException {
+		Photo photo = getById(id);
+		if (removeById(id)) {
+			new QiNiu().delete(photo.getSrcUrl(), "lyle-blog");
+			new QiNiu().delete(photo.getThumbnailUrl(), "lyle-blog");
+		}
+	}
+
 	public Page<Photo> getPhoto(Integer currentPage) {
 		Page<Photo> papge = new Page<>();
 		papge.setCurrent(currentPage);
 		papge.setSize(10);
-		Page<Photo> page = page(papge, null);
+
+		LambdaQueryWrapper<Photo> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+		lambdaQueryWrapper.orderByDesc(Photo::getId);
+		Page<Photo> page = page(papge, lambdaQueryWrapper);
 		page.getRecords().forEach(item -> {
 			//获取七牛图片原图
 			try {
@@ -52,7 +65,13 @@ public class AdminPhotoService extends ServiceImpl<PhotoMapper, Photo> {
 		return page;
 	}
 
-	public void savePhoto(MultipartFile multipartFile, String title, String tags, String spot) throws QiNiuException, IOException {
+	public void updateClickTimes(Long id) {
+		Photo photo = getById(id);
+		photo.setClickTimes(photo.getClickTimes() + 1);
+		saveOrUpdate(photo);
+	}
+
+	public void savePhoto(MultipartFile multipartFile, String title, String tags, String spot, String city) throws QiNiuException, IOException {
 
 		String uuid = IdUtil.simpleUUID();
 		//上传文件
@@ -62,11 +81,15 @@ public class AdminPhotoService extends ServiceImpl<PhotoMapper, Photo> {
 		long size = multipartFile.getSize() / 1024;
 		log.info("save photo,file name:{},file size:{}", newFileName, size);
 
-		//上传到七牛存储里去
-		new QiNiu().upload(multipartFile.getInputStream(), newFileName);
 
+		long l1 = System.currentTimeMillis();
+		//上传到七牛存储里去
+		log.info("开始文件上传到七牛.....");
+		new QiNiu().upload(multipartFile.getInputStream(), newFileName);
+		log.info("结束文件上传到七牛....." + (System.currentTimeMillis() - l1) / 1000);
 		//生产缩略图
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
+
 
 		Thumbnails.of(multipartFile.getInputStream())
 			//设置缩略图大小，按等比缩放
@@ -78,14 +101,16 @@ public class AdminPhotoService extends ServiceImpl<PhotoMapper, Photo> {
 		BufferedImage img = ImageIO.read(fileInputStream);
 
 		String thumbFileName = uuid + Constants.THUMBNAIL_SUFFIX + "." + fileExt;
+		l1 = System.currentTimeMillis();
+		log.info("开始缩略图文件上传到七牛.....");
 		new QiNiu().upload(fileInputStream2, thumbFileName);
-
+		log.info("结束缩略图文件上传到七牛....." + (System.currentTimeMillis() - l1) / 1000);
 		Photo photo = new Photo();
 		photo.setCreateTime(new Date());
 		photo.setTitle(title);
 		photo.setTags(tags);
 		photo.setSrcSize(size);
-
+		photo.setPhotoCity(city);
 		photo.setPhotoTouristSpot(spot);
 		photo.setThumbnailUrl(thumbFileName);
 		photo.setThumbnailWidth(img.getWidth());
@@ -104,16 +129,39 @@ public class AdminPhotoService extends ServiceImpl<PhotoMapper, Photo> {
 				}
 
 				if ("ExifSubIFDDirectory".equalsIgnoreCase(directory.getClass().getSimpleName())) {
-					photo.setSrcAValue(directory.getDouble(ExifSubIFDDirectory.TAG_FNUMBER));
-					photo.setSrcSValue(directory.getString(ExifSubIFDDirectory.TAG_EXPOSURE_TIME));
-					photo.setSrcIsoValue(directory.getInteger(ExifSubIFDDirectory.TAG_ISO_EQUIVALENT));
-					photo.setSrcFValue(directory.getInteger(ExifSubIFDDirectory.TAG_FOCAL_LENGTH));
-					photo.setSrcLensModel(directory.getString(ExifSubIFDDirectory.TAG_LENS_MODEL));
-					photo.setSrcMeteringMode(directory.getString(ExifSubIFDDirectory.TAG_METERING_MODE));
-					photo.setSrcFlashMode(directory.getString(ExifSubIFDDirectory.TAG_FLASH));
-					photo.setSrcMeteringMode(directory.getDescription(ExifSubIFDDirectory.TAG_METERING_MODE));
-					photo.setSrcFlashMode(directory.getDescription(ExifSubIFDDirectory.TAG_FLASH));
-					photo.setSrcEvValue(directory.getString(ExifSubIFDDirectory.TAG_EXPOSURE_BIAS));
+					if (directory.containsTag(ExifSubIFDDirectory.TAG_FNUMBER)) {
+						photo.setSrcAValue(directory.getDouble(ExifSubIFDDirectory.TAG_FNUMBER));
+					}
+					if (directory.containsTag(ExifSubIFDDirectory.TAG_EXPOSURE_TIME)) {
+						photo.setSrcSValue(directory.getString(ExifSubIFDDirectory.TAG_EXPOSURE_TIME));
+					}
+					if (directory.containsTag(ExifSubIFDDirectory.TAG_ISO_EQUIVALENT)) {
+						photo.setSrcIsoValue(directory.getInteger(ExifSubIFDDirectory.TAG_ISO_EQUIVALENT));
+					}
+					if (directory.containsTag(ExifSubIFDDirectory.TAG_FOCAL_LENGTH)) {
+						photo.setSrcFValue(directory.getInteger(ExifSubIFDDirectory.TAG_FOCAL_LENGTH));
+					}
+					if (directory.containsTag(ExifSubIFDDirectory.TAG_LENS_MODEL)) {
+						photo.setSrcLensModel(directory.getString(ExifSubIFDDirectory.TAG_LENS_MODEL));
+					}
+					if (directory.containsTag(ExifSubIFDDirectory.TAG_METERING_MODE)) {
+						photo.setSrcMeteringMode(directory.getString(ExifSubIFDDirectory.TAG_METERING_MODE));
+					}
+					if (directory.containsTag(ExifSubIFDDirectory.TAG_FLASH)) {
+						photo.setSrcFlashMode(directory.getString(ExifSubIFDDirectory.TAG_FLASH));
+					}
+					if (directory.containsTag(ExifSubIFDDirectory.TAG_FLASH)) {
+						photo.setSrcFlashMode(directory.getString(ExifSubIFDDirectory.TAG_FLASH));
+					}
+					if (directory.containsTag(ExifSubIFDDirectory.TAG_METERING_MODE)) {
+						photo.setSrcMeteringMode(directory.getDescription(ExifSubIFDDirectory.TAG_METERING_MODE));
+					}
+					if (directory.containsTag(ExifSubIFDDirectory.TAG_FLASH)) {
+						photo.setSrcFlashMode(directory.getDescription(ExifSubIFDDirectory.TAG_FLASH));
+					}
+					if (directory.containsTag(ExifSubIFDDirectory.TAG_EXPOSURE_BIAS)) {
+						photo.setSrcEvValue(directory.getString(ExifSubIFDDirectory.TAG_EXPOSURE_BIAS));
+					}
 //
 //					for (Tag tag : directory.getTags()) {
 //						String tagName = tag.getTagName(); // 标签名

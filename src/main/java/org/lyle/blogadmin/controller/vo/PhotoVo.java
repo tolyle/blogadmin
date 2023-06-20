@@ -25,4 +25,6 @@ public class PhotoVo {
 	private String srcImgURL;
 	private String lens;
 
+	private String photoTouristSpot;
+
 }

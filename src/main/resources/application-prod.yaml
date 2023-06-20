@@ -3,4 +3,4 @@ spring:
     driver-class-name: net.sf.log4jdbc.DriverSpy
     url: jdbc:log4jdbc:mysql://127.0.0.1:3306/blog?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8
 server:
-  port: 80
+  port: 8090

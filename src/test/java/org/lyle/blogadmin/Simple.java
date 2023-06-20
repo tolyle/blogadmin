@@ -1,29 +1,18 @@
 package org.lyle.blogadmin;
 
+import cn.hutool.core.util.RandomUtil;
+
 public class Simple {
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 
 
-        String sql = "where 1=1";
-        String a = "SELECT ab,c";
-        StringBuffer sb = new StringBuffer();
-        String[] arr = a.split(",");
+		int[] thumbSize = {1290, 800, 700, 1140, 1366, 600, 788, 600, 800, 589, 658};
 
+		int r1 = RandomUtil.randomInt(0, 10);
+		int r2 = RandomUtil.randomInt(0, 10);
 
+		System.out.println(thumbSize[r1]);
+		System.out.println(thumbSize[r2]);
 
-        if (a.contains(",")) {
-
-            for(int i = 0;i<arr.length;i++){
-                System.out.println("===="+arr[i]);
-            }
-
-            sb.append(arr[0]);
-            sb.append(" ");
-        } else {
-            sb.append(sql);
-        }
-
-        System.out.println(sb.toString());
-
-    }
+	}
 }

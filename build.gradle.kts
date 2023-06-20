@@ -112,3 +112,16 @@ tasks.register("deployToTencent") {
     }
 }
 
+
+tasks.register("tailfLog") {
+    doLast {
+        ssh.run(delegateClosureOf<RunHandler> {
+            session(remotes["tencent"], delegateClosureOf<SessionHandler> {
+                println("查看日志")
+                execute("tail -f /root/api.log");
+            })
+        })
+    }
+}
+
+
