@@ -85,7 +85,7 @@ tasks.withType<Test> {
 remotes {
     withGroovyBuilder {
         "create"("tencent") {
-            setProperty("host", "118.126.88.185")
+            setProperty("host", "bobjoy.com")
             setProperty("user", "root")
             //ssh-keygen -t rsa -m PEM
             setProperty("identity", file("${System.getProperty("user.home")}/.ssh/id_rsa"))

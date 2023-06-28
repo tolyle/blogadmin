@@ -80,7 +80,7 @@ public class QiNiu {
 	public String getPublicUrl(String fileName, String styleName) throws QiniuException {
 		try {
 
-			String domainOfBucket = "http://qiniu.tolyle.com";
+			String domainOfBucket = "https://qiniu.bobjoy.com";
 			String encodedFileName = URLEncoder.encode(fileName, "utf-8").replace("+", "%20");
 			String publicUrl = "";
 			if (StringUtils.isNotBlank(styleName)) {

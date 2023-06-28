@@ -24,7 +24,9 @@ public class Application {
 
 		SpringApplication app = new SpringApplication(Application.class);
 
-		if (IpUtil.sameNetwork(IpUtil.getHostIp(), "192.168.168.1", "255.55.255.0")) {
+		String ip =IpUtil.getHostIp();
+		log.info("运行IP:{}",ip);
+		if (IpUtil.sameNetwork(ip, "192.168.168.1", "255.55.255.0")||ip.equals("127.0.0.1")) {
 			//开发环境
 			System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "dev");
 		} else {
