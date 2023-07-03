@@ -35,6 +35,10 @@ public class Application {
 		}
 
 		//app.addListeners(new ApplicationPidFileWriter("api.pid"));
+
+		System.setProperty("server.connection-timeout","600000");
+		System.setProperty("server.tomcat.max-threads","50");
+
 		app.run(args);
 
 		log.info("启动成功,运行环境为{}", System.getProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME));

@@ -14,6 +14,7 @@ import com.drew.metadata.jpeg.JpegDirectory;
 import com.qiniu.common.QiniuException;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
+import org.apache.commons.lang3.StringUtils;
 import org.lyle.blogadmin.config.Constants;
 import org.lyle.blogadmin.entity.Photo;
 import org.lyle.blogadmin.exception.BusinessException;
@@ -44,13 +45,29 @@ public class AdminPhotoService extends ServiceImpl<PhotoMapper, Photo> {
 		}
 	}
 
-	public Page<Photo> getPhoto(Integer currentPage) {
+	public Page<Photo> getPhoto(Integer currentPage,String tag,String key) {
 		Page<Photo> papge = new Page<>();
 		papge.setCurrent(currentPage);
 		papge.setSize(10);
 
 		LambdaQueryWrapper<Photo> lambdaQueryWrapper = new LambdaQueryWrapper<>();
 		lambdaQueryWrapper.orderByDesc(Photo::getId);
+		lambdaQueryWrapper.like(StringUtils.isNotEmpty(tag), Photo::getTags, tag);
+
+		if (StringUtils.isNotEmpty(key)) {
+
+		lambdaQueryWrapper.and(wq -> wq.
+				like(StringUtils.isNotEmpty(key), Photo::getPhotoCity, key).or().
+				like(StringUtils.isNotEmpty(key), Photo::getPhotoTouristSpot, key).or().
+				like(StringUtils.isNotEmpty(key), Photo::getTitle, key).or().
+				like(StringUtils.isNotEmpty(key), Photo::getSrcCameraBrand, key).or().
+				like(StringUtils.isNotEmpty(key), Photo::getSrcCameraModel, key).or().
+				like(StringUtils.isNotEmpty(key), Photo::getSrcLensModel, key).or().
+				like(StringUtils.isNotEmpty(key), Photo::getCreateTime, key)
+		);
+	}
+
+
 		Page<Photo> page = page(papge, lambdaQueryWrapper);
 		page.getRecords().forEach(item -> {
 			//获取七牛图片原图

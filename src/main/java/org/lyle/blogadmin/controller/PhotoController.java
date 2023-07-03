@@ -5,7 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.lyle.blogadmin.controller.response.RR;
 import org.lyle.blogadmin.controller.vo.PhotoVo;
 import org.lyle.blogadmin.entity.Photo;
+import org.lyle.blogadmin.entity.Tag;
 import org.lyle.blogadmin.service.AdminPhotoService;
+import org.lyle.blogadmin.service.TagService;
 import org.lyle.blogadmin.utils.date.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +24,13 @@ public class PhotoController {
 
 	@Autowired
 	private AdminPhotoService adminPhotoService;
+	@Autowired
+	private TagService tagService;
+	@GetMapping(value = "/tags")
+	public RR tags() {
+		List<Tag> list = tagService.list();
+		return RR.success(list);
+	}
 
 	@GetMapping(value = "/echo")
 	public RR echo() {
@@ -29,8 +38,10 @@ public class PhotoController {
 	}
 
 	@GetMapping(value = "/index")
-	public RR findPhoto(Integer currentPage) {
-		Page<Photo> page = adminPhotoService.getPhoto(currentPage);
+	public RR findPhoto(Integer currentPage,String tag,String key) {
+		log.info("index,currentPage:{},tag:{},key:{}",currentPage,tag,key);
+
+		Page<Photo> page = adminPhotoService.getPhoto(currentPage,tag,key);
 
 		List<PhotoVo> list = new ArrayList<>();
 		page.getRecords().forEach(item -> {

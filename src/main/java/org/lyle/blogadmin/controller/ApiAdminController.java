@@ -33,7 +33,7 @@ public class ApiAdminController {
 	@GetMapping(value = "/photoList")
 	public RR findPhoto(Integer currentPage, String searchKey) {
 
-		Page<Photo> page = adminPhotoService.getPhoto(currentPage);
+		Page<Photo> page = adminPhotoService.getPhoto(currentPage,"","");
 
 		return RR.success(page);
 	}
