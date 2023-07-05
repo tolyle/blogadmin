@@ -6,6 +6,7 @@ import lombok.Data;
 public class PhotoVo {
 	private Long id;
 	private String city;
+	private String cityEn;
 	private String url;
 	private Integer width;
 	private Integer height;
@@ -24,6 +25,7 @@ public class PhotoVo {
 	private String flashMode;
 	private String srcImgURL;
 	private String lens;
+	private String photoTouristSpotEn;
 
 	private String photoTouristSpot;
 

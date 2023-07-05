@@ -64,7 +64,9 @@ public class ApiAdminController {
 	public RR savePhoto(HttpServletRequest request,
 			    String title,
 			    String spot,
+						String spotEn,
 			    String city,
+						String cityEn,
 			    String tags,
 			    MultipartFile[] files) {
 
@@ -76,7 +78,7 @@ public class ApiAdminController {
 				log.info("上传文件名,{},文件大小,{}M", multipartFile.getOriginalFilename(), multipartFile.getSize() / 1024 / 1024);
 
 
-				adminPhotoService.savePhoto(multipartFile, title, tags, spot, city);
+				adminPhotoService.savePhoto(multipartFile, title, tags, spot, city,spotEn,cityEn);
 				return new InputStreamResource(multipartFile.getInputStream(), multipartFile.getOriginalFilename());
 			} catch (IOException e) {
 				throw new BusinessException("输入流打开失败", e);

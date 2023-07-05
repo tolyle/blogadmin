@@ -23,6 +23,8 @@ public class Photo {
 	private String photoCountry;
 	//拍摄城市
 	private String photoCity;
+	private String photoCityEn;
+	private String photoTouristSpotEn;
 	//拍摄景点
 	private String photoTouristSpot;
 	//拍摄经度

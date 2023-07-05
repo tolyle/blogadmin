@@ -50,7 +50,13 @@ public class PhotoController {
 			photoVo.setId(item.getId());
 			photoVo.setCity(item.getPhotoCity());
 			photoVo.setCameraBrand(item.getSrcCameraBrand());
-			photoVo.setPhotoTime(DateUtil.dateAndTime(item.getPhotoTime()));
+			if(item.getPhotoTime()!=null){
+				photoVo.setPhotoTime(DateUtil.dateAndTime(item.getPhotoTime()));
+			}else{
+				photoVo.setPhotoTime(DateUtil.dateAndTime(item.getCreateTime()));
+			}
+			photoVo.setPhotoTouristSpotEn(item.getPhotoTouristSpotEn());
+			photoVo.setCityEn(item.getPhotoCityEn());
 			photoVo.setEvValue(item.getSrcEvValue());
 			photoVo.setAValue(item.getSrcAValue());
 			photoVo.setIsoValue(item.getSrcIsoValue());
